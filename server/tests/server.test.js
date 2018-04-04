@@ -52,7 +52,6 @@ describe('POST /todos', () => {
         .send({})
         .expect(400)
 
-
           Todo.find().then((todos) => {
             expect(todos.length).toBe(2);
             done();
@@ -102,5 +101,52 @@ describe('GET /todos/:id', () => {
         expect(res.body.todo).toBe();
       })
       .end(done);
+  });
+})
+
+describe('DELETE /todos/:id', () => {
+  it('should delete todo with valid id', (done)=> {
+    var hexId = todos[0]._id.toHexString();
+    request(app)
+      .delete(`/todos/${hexId}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo._id).toBe(hexId);
+      })
+      .end((err, res) => {
+        if(err)
+        {
+          return done(err);
+        }
+
+        Todo.findById(hexId).then((todo) => {
+          expect(todo).toNotExist();
+          done();
+        }).catch((err) => done(err));
+      });
+      
+     
+  });
+
+  it('should return not found for todo with invalid id', (done)=> {
+    request(app)
+      .delete('/todos/123')
+      .expect(404)
+      .expect((res) => {
+        expect(res.body.todo).toBe();
+      })
+      .end(done);
+  });
+
+  it('should return not found for todo when id not found', (done)=> {
+    var hexId = new ObjectId().toHexString();
+    request(app)
+      .delete(`/todos/${hexId}`)
+      .expect(404)
+      .expect((res) => {
+        expect(res.body.todo).toBe();
+      })
+      .end(done);
+  
   });
 })
