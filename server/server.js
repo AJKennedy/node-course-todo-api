@@ -1,24 +1,12 @@
-var env = process.env.NODE_ENV || 'development';
-console.log(env);
-
-if (env === 'development')
-{
-  process.env.PORT = 3000;
-  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp';
-} else if (env === 'test'){
-  process.env.PORT = 3000;
-  process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest';
-} else if (env === 'production'){
-  process.env.MONGODB_URI = 'mongodb://appUser:TestPassword@ds233739.mlab.com:33739/todo-app-api';
-}
+require('./config/config');
 
 const express = require('express');
 const bodyParser = require('body-parser')
 const _ = require('lodash');
 
-const {mongoose} = require('./db/mongoose.js');
-const {Todo} = require('./models/todo.js');
-const {User} = require('./models/user.js');
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 const {ObjectId} = require('mongodb');
 
 var app = express();
