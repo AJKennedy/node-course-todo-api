@@ -7,7 +7,7 @@ let db = {
   mlab: 'mongodb://appUser:TestPassword@ds233739.mlab.com:33739/todo-app-api'
 };
 
-mongoose.connect( db.localhost || db.mlab);
+mongoose.connect(db.mlab);
 
 module.exports = {
   mongoose
