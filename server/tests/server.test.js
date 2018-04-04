@@ -166,18 +166,9 @@ describe('Patch /todos/:id', () => {
       .expect((res) => {
         expect(res.body.todo.completed).toBe(true);
         expect(res.body.todo.text).toBe(text);
+        expect(res.body.todo.completedAt).toExist();
       })
-      .end((err, res) => {
-        if(err)
-        {
-          return done(err);
-        }
-
-        Todo.findById(hexId).then((todo) => {
-          expect(todo.completedAt).toExist();
-          done();
-        }).catch((err) => done(err));
-      }); 
+      .end(done); 
   });
 
   it('it should clear completedAt when todo is not completed', (done)=> {
@@ -190,17 +181,8 @@ describe('Patch /todos/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.todo.completed).toBe(false);
+        expect(res.body.todo.completedAt).toNotExist();
       })
-      .end((err, res) => {
-        if(err)
-        {
-          return done(err);
-        }
-
-        Todo.findById(hexId).then((todo) => {
-          expect(todo.completedAt).toNotExist();
-          done();
-        }).catch((err) => done(err));
-      }); 
+      .end(done); 
     });
 })
